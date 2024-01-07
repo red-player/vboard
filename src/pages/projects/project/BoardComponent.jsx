@@ -4,12 +4,15 @@ import { Typography } from "@mui/material";
 
 import BoardList from "./board/BoardList";
 import AddBoard from "../../../components/AddModal/AddBoard";
+import { getAllBoard } from "../../../service/board/board";
 
 const BoardComponent = ({ projectId }) => {
   const [projects, setProjects] = useState([]);
+  const [allBoard, setAllBoard] = useState([]);
 
   useEffect(() => {
     getProjects(projectId, setProjects);
+    getAllBoard(projectId, setAllBoard);
     return () => {};
   }, [projectId]);
 
@@ -30,8 +33,8 @@ const BoardComponent = ({ projectId }) => {
       <Typography sx={{ fontSize: "12px", color: "red" }}>
         End At: {formatDate(projects.end_date)}
       </Typography>
-      <AddBoard projectId={projectId} />
-      <BoardList projectId={projectId} />
+      <AddBoard projectId={projectId} setAllBoard={setAllBoard} />
+      <BoardList projectId={projectId} allBoard={allBoard} />
     </>
   );
 };

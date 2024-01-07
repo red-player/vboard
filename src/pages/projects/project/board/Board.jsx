@@ -1,8 +1,16 @@
 import React, { useState } from "react";
-import { Stack, Grid, Typography, IconButton, Box, Paper } from "@mui/material";
+import {
+  Stack,
+  Grid,
+  Typography,
+  IconButton,
+  Box,
+  Paper,
+  Tooltip,
+} from "@mui/material";
 import OpenIcon from "@mui/icons-material/Launch";
 import DescriptionIcon from "@mui/icons-material/Description";
-import {  useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   Dialog,
   DialogTitle,
@@ -18,6 +26,9 @@ const Board = ({ boardName, description, boardId, projectId }) => {
 
   const handleClick = () => {
     navigate(`${boardId}`);
+  };
+  const handleClickDnd = () => {
+    navigate(`${boardId}/v2`);
   };
 
   const handleDescription = () => {
@@ -64,11 +75,21 @@ const Board = ({ boardName, description, boardId, projectId }) => {
 
                 <Stack direction="row" spacing={1}>
                   <IconButton onClick={handleClick} size="small">
-                    <OpenIcon />
+                    <Tooltip title={"Board"}>
+                      <OpenIcon />
+                    </Tooltip>
+                  </IconButton>
+
+                  <IconButton onClick={handleClickDnd} size="small">
+                    <Tooltip title={"Board dnd"}>
+                      <OpenIcon />
+                    </Tooltip>
                   </IconButton>
 
                   <IconButton onClick={handleDescription}>
-                    <DescriptionIcon />
+                    <Tooltip title={"Board Description"}>
+                      <DescriptionIcon />
+                    </Tooltip>
                   </IconButton>
                 </Stack>
               </Stack>

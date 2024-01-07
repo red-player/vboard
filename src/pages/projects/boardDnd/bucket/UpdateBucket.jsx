@@ -8,24 +8,26 @@ import {
   TextField,
   Stack,
 } from "@mui/material";
-import { getAllBoard } from "../../service/board/board";
+import UpgradeIcon from "@mui/icons-material/Upgrade";
+import { IconButton, Tooltip } from "@mui/material";
+import { getBuckets } from "../../../../service/bucket/bucket";
 
-const AddBoard = ({ projectId, setAllBoard }) => {
-  const [boardName, setBoardName] = useState("");
+const UpdateBucket = ({ boardId, bucketId, setBuckets }) => {
+  const [bucketName, setBucketName] = useState("");
   const [description, setDescription] = useState("");
   const [openDialog, setOpenDialog] = useState(false);
 
-  const handleAddBoard = async () => {
+  const handleUpdateBucket = async () => {
     try {
       const response = await fetch(
-        `http://localhost:4000/projects/${projectId}/board`,
+        `http://localhost:4000/board/${boardId}/bucket/${bucketId}`,
         {
-          method: "POST",
+          method: "PATCH",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            boardName,
+            bucketName,
             description,
           }),
         }
@@ -35,57 +37,46 @@ const AddBoard = ({ projectId, setAllBoard }) => {
         const data = await response.json();
         console.log(data);
         setOpenDialog(false);
-        setBoardName("");
+        setBucketName("");
         setDescription("");
-        getAllBoard(projectId, setAllBoard);
+        getBuckets(boardId, setBuckets);
       } else {
-        console.error("Failed to add Board");
+        console.error("Failed to Update bucket");
       }
     } catch (error) {
       console.error("Error:", error);
     }
   };
-
   const handleOpenDialog = () => {
     setOpenDialog(true);
   };
 
   const handleCloseDialog = () => {
-    setBoardName("");
-    setDescription("");
     setOpenDialog(false);
   };
 
   return (
-    <div>
-      <Button
-        variant="outlined"
-        onClick={handleOpenDialog}
-        style={{
-          position: "relative",
-          right: 0,
-          left: 1137,
-          top: "15px",
-          marginTop: "10px",
-        }}
-      >
-        Add Board
-      </Button>
+    <>
+      <Tooltip title="UPDATE BUCKET">
+        <IconButton onClick={handleOpenDialog}>
+          <UpgradeIcon />
+        </IconButton>
+      </Tooltip>
+
       <Dialog open={openDialog} onClose={handleCloseDialog}>
         <Stack p={2}>
-          <DialogTitle>Add Board</DialogTitle>
+          <DialogTitle>Update Bucket</DialogTitle>
           <DialogContent>
             <TextField
-              sx={{ marginBottom: "10px" }}
-              label="Board Name"
+              label="Bucket Name"
               variant="outlined"
               fullWidth
-              value={boardName}
-              onChange={(e) => setBoardName(e.target.value)}
+              value={bucketName}
+              onChange={(e) => setBucketName(e.target.value)}
+              sx={{ marginTop: "10px" }}
             />
 
             <TextField
-              sx={{ marginBottom: "10px" }}
               label="Description"
               variant="outlined"
               multiline
@@ -93,16 +84,17 @@ const AddBoard = ({ projectId, setAllBoard }) => {
               fullWidth
               value={description}
               onChange={(e) => setDescription(e.target.value)}
+              sx={{ marginTop: "10px" }}
             />
           </DialogContent>
           <DialogActions>
             <Button onClick={handleCloseDialog}>Cancel</Button>
-            <Button onClick={handleAddBoard}>Add Board</Button>
+            <Button onClick={handleUpdateBucket}>Update bucket</Button>
           </DialogActions>
         </Stack>
       </Dialog>
-    </div>
+    </>
   );
 };
 
-export default AddBoard;
+export default UpdateBucket;
