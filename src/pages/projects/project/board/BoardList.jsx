@@ -3,12 +3,7 @@ import { Container, Grid, Stack, Typography } from "@mui/material";
 import { getAllBoard } from "../../../../service/board/board";
 import Board from "./Board";
 
-const BoardList = ({ projectId }) => {
-  const [allBoard, setAllBoard] = useState([]);
-  useEffect(() => {
-    getAllBoard(projectId, setAllBoard);
-  }, []);
-
+const BoardList = ({ projectId, allBoard }) => {
   const filteredBoards = allBoard
     ? allBoard.filter((board) => !board.isDeleted)
     : [];
